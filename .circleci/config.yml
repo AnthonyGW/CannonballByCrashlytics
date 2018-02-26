@@ -99,32 +99,12 @@ jobs:
 
 workflows:
   version: 2
-  lint_and_test:
-    jobs:
-      - lint
-      - test:
-          requires:
-            - lint
-          filters:
-            branches:
-              only: development
-
   lint_test_and_deployment:
     jobs:
       - lint
-          # filters:
-          #   branches:
-          #     only:
-          #       - staging
-          #       - master
       - test:
           requires:
             - lint
-          filters:
-            branches:
-              only:
-                - staging
-                - master
       - deploy_to_staging:
           requires:
             - test
