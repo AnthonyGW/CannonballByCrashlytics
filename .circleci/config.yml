@@ -2,44 +2,126 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
+
+default: &defaults
+  docker:
+    # specify the version you desire here
+    - image: circleci/openjdk:8-jdk
+    
+    # Specify service dependencies here if necessary
+    # CircleCI maintains a library of pre-built images
+    # documented at https://circleci.com/docs/2.0/circleci-images/
+    # - image: circleci/postgres:9.4
+
+  working_directory: ~/repo
+
+  environment:
+    # Customize the JVM maximum heap limit
+    JVM_OPTS: -Xmx3200m
+    TERM: dumb 
+
 version: 2
 jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
+  lint:
+    steps:
+      - run:
+          name: Run quality checks
+          command: |
+            echo "Run PMD and other linting tools"
 
-    working_directory: ~/repo
-
-    environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
-    
+  test:
+    <<: *defaults
     steps:
       - checkout
-
       # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "build.gradle" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-
       - run: gradle dependencies
-
       - save_cache:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
-        
       # run tests!
-      - run: gradle test
+      - run:
+          name: Run unit tests on source code
+          command: |
+            echo "Run 'gradle test' or mockito"
+      - run:
+          name: Run integration tests on apk build
+          command: |
+            echo "Run espresso or ui-automator"
+  
+  deploy_to_staging:
+    <<: *defaults
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: gradle dependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+      - run:
+          name: Deploy to quality checking
+          command: |
+            echo "Deploy to fastlane or crashlytics"
 
+  deploy_to_production:
+    <<: *defaults
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: gradle dependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+      - run:
+          name: Deploy to store
+          command: |
+            echo "Publish to play store"
 
+workflows:
+  version: 2
+  lint_and_test:
+    jobs:
+      - lint
+      - test:
+          requires:
+            - lint
+          filters:
+            branches:
+            only: development
 
+  lint_test_and_deployment:
+    jobs:
+      - lint
+      - test:
+          requires:
+            - lint
+      - deploy_to_staging:
+          requires:
+            - test
+          filters:
+            branches:
+              only: staging
+      - deploy_to_production:
+          type: approval
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
