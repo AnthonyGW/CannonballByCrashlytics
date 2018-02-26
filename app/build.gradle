@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.application:gradle:4.5.1'
 apply plugin: 'io.fabric'
 
 
