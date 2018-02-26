@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-apply plugin: 'com.android.application:gradle:2.+'
+// apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 
