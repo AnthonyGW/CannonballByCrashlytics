@@ -104,8 +104,7 @@ workflows:
             - lint
           filters:
             branches:
-            only: development
-
+              only: development
   lint_test_and_deployment:
     jobs:
       - lint
