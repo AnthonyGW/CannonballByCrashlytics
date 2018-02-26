@@ -52,6 +52,7 @@ jobs:
           name: Run unit tests on source code
           command: |
             echo "Run 'gradle test' or mockito"
+            ls -a /
             gradle test --info
       - run:
           name: Run integration tests on apk build
