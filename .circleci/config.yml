@@ -45,11 +45,11 @@ jobs:
       - run:
           name: Install android sdk tools
           command: |
-            sudo mkdir /sdk
-            sudo chmod +w /sdk
+            sudo mkdir ~/sdk
+            sudo chmod ugo+rw ~/sdk
             sudo curl -O https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
-            sudo unzip -qq sdk-tools-linux-3859397.zip -d /sdk
-            cd /sdk/tools
+            sudo unzip -qq sdk-tools-linux-3859397.zip -d ~/sdk
+            cd ~/sdk/tools
             echo y | sudo bin/sdkmanager --update
       - run: gradle dependencies --info
       - save_cache:
