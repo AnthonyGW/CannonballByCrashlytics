@@ -53,6 +53,11 @@ jobs:
             sudo mkdir /sdk
             sudo curl -O https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
             sudo unzip -qq sdk-tools-linux-3859397.zip -d /sdk
+            cd /sdk/tools
+            sudo /sdk/tools/android update sdk --no-ui
+            sudo apt-get install libc6:i386 libstdc++6:i386
+            sudo apt-get install zlib1g:i386
+
       # run tests!
       - run:
           name: Run unit tests on source code
