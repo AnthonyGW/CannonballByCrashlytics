@@ -51,7 +51,7 @@ jobs:
             sudo unzip -qq sdk-tools-linux-3859397.zip -d ~/sdk
             cd ~/sdk/tools
             echo y | sudo bin/sdkmanager --update
-      - run: gradle dependencies --info
+      # - run: gradle dependencies --info
       - save_cache:
           paths:
             - ~/.gradle
