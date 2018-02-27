@@ -51,10 +51,7 @@ jobs:
             sudo unzip -qq sdk-tools-linux-3859397.zip -d ~/sdk
             cd ~/sdk/tools
             echo y | sudo bin/sdkmanager --update
-      - run: 
-          command: |
-            buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
-            gradle dependencies --info --scan
+      # - run: gradle dependencies --info --scan
       - save_cache:
           paths:
             - ~/.gradle
@@ -65,7 +62,7 @@ jobs:
           name: Run unit tests on source code
           command: |
             echo "Run 'gradle test' or mockito"
-            gradle test --info
+            gradle test --info --scan
       - run:
           name: Run integration tests on apk build
           command: |
