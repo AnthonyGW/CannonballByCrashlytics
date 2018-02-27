@@ -51,7 +51,8 @@ jobs:
           name: Install android sdk tools
           command: |
             sudo mkdir /sdk
-            curl -silent -O https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+            sudo curl -O https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+            unzip -q sdk-tools-linux-3859397.zip -d /sdk
       # run tests!
       - run:
           name: Run unit tests on source code
