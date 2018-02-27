@@ -54,7 +54,7 @@ jobs:
             sudo curl -O https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
             sudo unzip -qq sdk-tools-linux-3859397.zip -d /sdk
             cd /sdk/tools
-            sudo /sdk/tools/android update sdk --no-ui --use-sdk-wrapper -y
+            sudo /sdk/tools/android update sdk --no-ui --use-sdk-wrapper <<< "y"
 
       # run tests!
       - run:
