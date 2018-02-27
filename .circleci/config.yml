@@ -46,6 +46,7 @@ jobs:
           name: Install android sdk tools
           command: |
             sudo mkdir /sdk
+            sudo chmod +w /sdk
             sudo curl -O https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
             sudo unzip -qq sdk-tools-linux-3859397.zip -d /sdk
             cd /sdk/tools
