@@ -54,8 +54,8 @@ jobs:
             sudo curl -O https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
             sudo unzip -qq sdk-tools-linux-3859397.zip -d /sdk
             cd /sdk/tools
-            yes | sudo /sdk/tools/bin/sdkmanager --licenses
-            sudo /sdk/tools/bin/sdkmanager --update
+            yes | bin/sdkmanager --licenses
+            sudo bin/sdkmanager --update
 
       # run tests!
       - run:
