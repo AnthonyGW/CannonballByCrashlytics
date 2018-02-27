@@ -42,11 +42,6 @@ jobs:
           - v1-dependencies-{{ checksum "build.gradle" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      # - run: gradle dependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
       - run:
           name: Install android sdk tools
           command: |
@@ -55,14 +50,18 @@ jobs:
             sudo unzip -qq sdk-tools-linux-3859397.zip -d /sdk
             cd /sdk/tools
             echo y | sudo bin/sdkmanager --update
+      - run: gradle dependencies --info
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests!
       - run:
           name: Run unit tests on source code
           command: |
             echo "Run 'gradle test' or mockito"
-            ls -a /
-            sudo gradle test --info
+            gradle test --info
       - run:
           name: Run integration tests on apk build
           command: |
