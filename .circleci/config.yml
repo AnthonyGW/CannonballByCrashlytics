@@ -51,7 +51,10 @@ jobs:
             sudo unzip -qq sdk-tools-linux-3859397.zip -d ~/sdk
             cd ~/sdk/tools
             echo y | sudo bin/sdkmanager --update
-      - run: gradle dependencies --info --scan
+      - run: 
+          command: |
+            buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
+            gradle dependencies --info --scan
       - save_cache:
           paths:
             - ~/.gradle
